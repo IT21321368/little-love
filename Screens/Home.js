@@ -34,6 +34,9 @@ function Home(){
   const navigateToAddHealthGuides = () => {
     navigation.navigate('Add Health Guides');
   };
+  const navigateToQRscan = () => {
+    navigation.navigate('QR Scan');
+  };
   
   const fetchClinicDetails = () => {
     const detailsRef = ref(db, '/clinicdetails');
@@ -86,7 +89,7 @@ function Home(){
         <View style={{ flexDirection: 'row',justifyContent: 'space-between', padding: 16 }}>
         <Text style={{ fontSize: 23,fontWeight: 'bold', color: 'black' ,left:100,top:25}}>Little Love</Text>
 
-          <TouchableOpacity >
+          <TouchableOpacity onPress={navigateToQRscan}>
             <Image source={ scanIcon } style={{ width: 30, height: 30,marginTop:30,marginLeft:5}} />
           </TouchableOpacity>
           
@@ -112,6 +115,11 @@ function Home(){
           </View>
         </TouchableOpacity>
       </View> 
+      <TouchableOpacity >
+        <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 8, margin: 6, backgroundColor: '#5BF6DB', height: 40, width: 385 }}>
+          <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000', textAlign: 'center' }}>Mother List</Text>
+        </View>
+      </TouchableOpacity>
 
     <ScrollView>
         {/* Display the added clinic details in cards */}

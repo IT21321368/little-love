@@ -16,6 +16,9 @@ import AddHealthguides from './Screens/AddHealthguides';
 import MotherProfile from './Screens/MotherProfile';
 import MotherProDetails from './Screens/MotherProDetails';
 import sellerprofile from './Screens/SellerProfile';
+import QRcodeGenarater from './Screens/QRcodeGenarater';
+import QRcode from './Screens/QRcode';
+import QRCodeScanner from './Screens/QRcodeScanner';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +41,9 @@ function App() {
         <Stack.Screen name="Mother Profile" component={MotherProfile} />
         <Stack.Screen name="Mother Profile Details" component={MotherProDetails} />
         <Stack.Screen name="Seller Profile" component={sellerprofile} />
+        <Stack.Screen name="QR Generator" component={QRcodeGenarater} />
+        <Stack.Screen name="QR Code" component={QRcode} />
+        <Stack.Screen name="QR Scan" component={QRCodeScanner} />
 
       </Stack.Navigator>
     </NavigationContainer>

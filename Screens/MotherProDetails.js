@@ -53,10 +53,11 @@ function MotherProDetails() {
     <View style={{ flex: 1 }}>
         {/* Header with Profile and QR Code icons */}
         <View style={{ backgroundColor: '#5BF6DB', padding: 16 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
           <TouchableOpacity onPress={navigateToMotherProfile}>
             <Image source={ arrow } style={{ width: 30, height: 30,marginTop:30 }} />
           </TouchableOpacity>
+          <Text style={{ marginLeft: 90, fontSize: 20,fontWeight: 'bold', color: 'black' ,marginTop:30 }}>My Profile</Text>
          
         </View>
         </View>
