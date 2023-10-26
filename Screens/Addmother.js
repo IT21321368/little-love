@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 import { ref, query, orderByChild, equalTo, push, onValue, set } from 'firebase/database';
 import { db } from '../FirebaseConfig';
-
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Make sure to include getAuth here
 // const backgroundImage = require('../assets/bg.png'); // Replace with the actual path to your background image
 
 const Add = ({ navigation }) => {
@@ -15,6 +15,12 @@ const Add = ({ navigation }) => {
   const [PHM, setPHM] = useState('');
 
   function createMother() {
+
+    const auth = getAuth();
+
+    createUserWithEmailAndPassword(auth, email, registeredNo) // Replace 'password' with the desired password
+    .then((userCredential) => {
+      const user = userCredential.user;
     const usersRef = ref(db, 'mother');
     const newUserRef = push(usersRef);
 
@@ -25,7 +31,8 @@ const Add = ({ navigation }) => {
       occupation: occupation,
       registeredNo: registeredNo,
       DDSH: DDSH,
-      PHM: PHM
+      PHM: PHM,
+      // password: registeredNo, // Store registeredNo as the password
     })
       .then(() => {
         alert('Create Mother Profile Successfully');
@@ -40,8 +47,8 @@ const Add = ({ navigation }) => {
       .catch((error) => {
         alert(error.message);
       });
+  })
   }
-
   useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -186,5 +193,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
 
 export default Add;

@@ -1,15 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { View ,Image,ScrollView,TouchableOpacity,Text,TextInput} from "react-native";
 import { useRoute } from '@react-navigation/native';
-import Profile from "./Profile";
+import { useFocusEffect } from '@react-navigation/native';
+import { ref, get, child ,remove} from 'firebase/database'; // Import necessary Firebase database functions
+import { db } from '../FirebaseConfig'; // Import your Firebase configuration
 
+const scanIcon = require('../assets/qr-scan.png');
 
+const deleteIcon = require('../assets/trash.png');
 function Home(){
   const route = useRoute();
-  // const [clinicDetails, setClinicDetails] = useState([]);
-  // const passedText = route.params?.passedText || "MW****";
-  const { passedText, clinicDetails } = route.params || { passedText: 'MW****', clinicDetails: [] };
+  const [clinicDetails, setClinicDetails] = useState([]);
+  const passedText = route.params?.passedText || "MW****";
+  // const { passedText, clinicDetails } = route.params || { passedText: 'MW****', clinicDetails: [] };
 
   const navigation = useNavigation();
 
@@ -31,73 +35,112 @@ function Home(){
     navigation.navigate('Add Health Guides');
   };
   
-  const addDetails = (newDetails) => {
-      // Add the new details to the state
-      setClinicDetails([...clinicDetails, newDetails]);
-    };
+  const fetchClinicDetails = () => {
+    const detailsRef = ref(db, '/clinicdetails');
+    get(child(detailsRef, '/')).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        if (data) {
+          const detailsArray = Object.entries(data).map(([key, value]) => ({ key, ...value }));
+          setClinicDetails(detailsArray);
+        }
+      }
+    });
+  };
+  
+  // Fetch clinic details from Firebase when the component mounts
+  useEffect(() => {
+    // const detailsRef = ref(db, '/clinicdetails'); // Replace 'clinicdetails' with your Firebase database path
+    // get(child(detailsRef, '/')).then((snapshot) => {
+    //   if (snapshot.exists()) {
+    //     const data = snapshot.val();
+    //     if (data) {
+    //       // const detailsArray = Object.values(data);
+    //       const detailsArray = Object.entries(data).map(([key, value]) => ({ key, ...value }));
+    //       setClinicDetails(detailsArray);
+    //     }
+    //   }
+    // });
+    fetchClinicDetails();
+  }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchClinicDetails();
+    }, [])
+  );
+
+  const deleteClinicDetails = (key) => {
+    // Remove the clinic details from Firebase
+    const detailsRef = ref(db, `/clinicdetails/${key}`);
+    remove(detailsRef).then(() => {
+      // Update the state to remove the deleted item
+      setClinicDetails((prevDetails) => prevDetails.filter((item) => item.key !== key));
+    });
+  };
   
   return(
 
     <View style={{flex:1,}}>
-    <Text style={{textAlign:'center',padding:60,fontSize:30,backgroundColor:'#5BF6DB',fontWeight:'bold'}}>Midwife Name</Text> 
-    <Text style={{textAlign:'center',padding:10,fontSize:20,backgroundColor:'#5BF6DB',fontWeight:'bold',marginTop:-50}}>{passedText}</Text> 
+          <View style={{ backgroundColor: '#5BF6DB', padding: 16 }}>
+        <View style={{ flexDirection: 'row',justifyContent: 'space-between', padding: 16 }}>
+        <Text style={{ fontSize: 23,fontWeight: 'bold', color: 'black' ,left:100,top:25}}>Little Love</Text>
 
+          <TouchableOpacity >
+            <Image source={ scanIcon } style={{ width: 30, height: 30,marginTop:30,marginLeft:5}} />
+          </TouchableOpacity>
+          
+        </View>
+        </View>
 
     <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={navigateToAddClinicDetails}>
-          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 9, margin: 8, backgroundColor: '#5BF6DB' ,height: 60, width: 120}}>
+          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 9, margin: 6, backgroundColor: '#5BF6DB' ,height: 60, width: 120}}>
             <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000',textAlign: 'center' }}>Add Clinic Details</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={navigateToAddMother}>
-          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 10, margin: 9, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
+          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 10, margin: 6, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000',textAlign: 'center' }}>Add Mother</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={navigateToAddHealthGuides}>
-          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 10, margin: 9, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
+          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 10, margin: 6, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000',textAlign: 'center' }}>Add Health Guides</Text>
           </View>
         </TouchableOpacity>
-      </View>
-
-
-      {/* <ScrollView> */}
-        {/* Display the added clinic details */}
-        {/* {clinicDetails.map((details, index) => (
-          <View key={index}>
-            <Text>Date: {details.clinicDate}</Text>
-            <Text>Program: {details.clinicProgram}</Text>
-            <Text>Vaccination: {details.vaccinationProgram}</Text>
-            <Text>Nutrition Supplements: {details.nutritionSupplements}</Text>
-          </View>
-        ))}
-      </ScrollView> */}
-      {/* <AddClinicDetails addDetails={addDetails} /> */}
-    {/* </View> */}
+      </View> 
 
     <ScrollView>
         {/* Display the added clinic details in cards */}
         {clinicDetails.map((details, index) => (
           <View key={index} style={{ borderColor: 'black', borderWidth: 1, borderRadius: 10, padding: 10, margin: 10 }}>
-            <Text>Date: {details.clinicDate}</Text>
-            <Text>Program: {details.clinicProgram}</Text>
-            <Text>Vaccination: {details.vaccinationProgram}</Text>
-            <Text>Nutrition Supplements: {details.nutritionSupplements}</Text>
+            <TouchableOpacity onPress={() => deleteClinicDetails(details.key)}>
+            <View style={{ position: 'absolute', top: 2, right: 10, width: 20, height: 20 }}>
+               <Image source={deleteIcon} style={{ position: 'absolute', top: 2, right: 10,width: 20, height: 20 }} />
+               </View>
+            </TouchableOpacity>
+            <Text> {details.date}</Text>
+            <View style={{ height: 1, backgroundColor: 'gray', marginVertical: 5 }} /> 
+            <View style={{ flexDirection: 'coloum', justifyContent: 'space-between' }}>
+            <Text>Clinic Program :  {details.clinicDetails}</Text>
+            <Text>Vaccination :   {details.vaccDetails}</Text>
+            <Text>Nutrition Supplements : {details.nutDetails}</Text>
+            </View>
+            
           </View>
         ))}
       </ScrollView>
    
 
-  <View style={{background: 'rgb(238,174,202)',position:'absolute',bottom:10,backgroundColor:'#5BF6DB',flexDirection: 'row',justifyContent: 'flex-end', alignItems: 'flex-end'}} >
+  <View style={{background: 'rgb(238,174,202)',position:'absolute',bottom:0,backgroundColor:'#5BF6DB',flexDirection: 'row',justifyContent: 'space-between'}} >
    
    <TouchableOpacity >
     <Image
 source={{uri: 'https://freesvg.org/img/dynnamitt_home.png'}}
-style={{width: 40, height: 40,marginLeft:55,marginTop:30,marginRight:55,marginBottom:40}}/>
+style={{width: 40, height: 40,marginLeft:45,marginTop:30,marginRight:55,marginBottom:40}}/>
 </TouchableOpacity>
 <Image
 source={{uri: 'https://freesvg.org/img/grocery-15.png'}}
@@ -105,7 +148,7 @@ style={{width: 40, height: 40,marginLeft:45,marginTop:30,marginRight:50,marginBo
 <TouchableOpacity>
 <Image
 source={{uri: 'https://freesvg.org/img/1506603007.png'}}
-style={{width: 50, height: 40,marginLeft:55,marginTop:30,marginRight:50,marginBottom:40}}/>
+style={{width: 50, height: 40,marginLeft:45,marginTop:30,marginRight:50,marginBottom:40}}/>
 </TouchableOpacity>
 
   </View>

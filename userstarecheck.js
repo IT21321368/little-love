@@ -3,13 +3,6 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore'
 
 const firebaseConfig = {
-    // apiKey: "AIzaSyC1PSL22R48xuHj_V7BwTCgGOUz-rCa2ZY",
-    // authDomain: "littlelove-e5353.firebaseapp.com",
-    // databaseURL: "https://littlelove-e5353-default-rtdb.firebaseio.com",
-    // projectId: "littlelove-e5353",
-    // storageBucket: "littlelove-e5353.appspot.com",
-    // messagingSenderId: "783307813886",
-    // appId: "1:783307813886:web:2f5d858c6c0624940106af"
 
     apiKey: "AIzaSyD8KgliMnL-YMr3FPskzbkxKGXUaT4ZYxc",
     authDomain: "little-love-aef05.firebaseapp.com",

@@ -54,23 +54,22 @@ function Registerseller() {
       }
    
       const backtothelogin = () => {
-          navigation.navigate('Loginseller');
+          navigation.navigate('Login');
         };
     return(
-        <View
-          style={{alignItems: 'center', justifyContent: 'center'}}>
-            <View style={{borderColor:'#000000',borderWidth:2,backgroundColor:'#F1DEDE',padding:30,borderRadius:40,justifyContent:'center'}}>
-            <Text style={{textAlign:'center',fontSize:30,fontWeight:'bold',marginTop:10,marginBottom:40,color:'#000000'}}>LittleLove</Text>
-            <TextInput onChangeText={(text) => setName(text)} style={{borderWidth:2,borderColor:'#000000',backgroundColor:'#FFF',padding:15,width:250,borderRadius:30,margin:10}}  placeholder= "Enter Name"/>
-            <TextInput onChangeText={(text) => setEmail(text)} style={{borderWidth:2,borderColor:'#000000',backgroundColor:'#FFF',padding:15,width:250,borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter Email"/>
-            <TextInput onChangeText={(text) => setPassword(text)} style={{borderWidth:2,borderColor:'#000000',backgroundColor:'#FFF',padding:15,width:250,borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter Password"/>
-            <TextInput onChangeText={(text) => setidnumber(text)} style={{borderWidth:2,borderColor:'#000000',backgroundColor:'#FFF',padding:15,width:250,borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter ID No"/>
-            <TextInput onChangeText={(text) => setphone(text)} style={{borderWidth:2,borderColor:'#000000',backgroundColor:'#FFF',padding:15,width:250,borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter phone"/>
+        <View>
+          
+            <Text style={{textAlign:'center',fontSize:30,fontWeight:'bold',marginTop:70,marginBottom:40,color:'#000000'}}>Little Love</Text>
+            <TextInput onChangeText={(text) => setName(text)} style={{borderWidth:2,borderColor:'#D0FEF5',backgroundColor:'#D0FEF5',padding:15,width:'90%',borderRadius:30,margin:10,marginBottom:20}}  placeholder= "Enter Name"/>
+            <TextInput onChangeText={(text) => setEmail(text)} style={{borderWidth:2,borderColor:'#D0FEF5',backgroundColor:'#D0FEF5',padding:15,width:'90%',borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter Email"/>
+            <TextInput onChangeText={(text) => setPassword(text)} style={{borderWidth:2,borderColor:'#D0FEF5',backgroundColor:'#D0FEF5',padding:15,width:'90%',borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter Password"/>
+            <TextInput onChangeText={(text) => setidnumber(text)} style={{borderWidth:2,borderColor:'#D0FEF5',backgroundColor:'#D0FEF5',padding:15,width:'90%',borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter ID No"/>
+            <TextInput onChangeText={(text) => setphone(text)} style={{borderWidth:2,borderColor:'#D0FEF5',backgroundColor:'#D0FEF5',padding:15,width:'90%',borderRadius:30,margin:10,marginBottom:20,}}  placeholder= "Enter phone"/>
             <Text onPress={backtothelogin} style={{fontWeight:'bold',textAlign:'center'}}>Haven an acoount? Login</Text>
-            <TouchableOpacity onPress={createuserforseller} style={{display:'flex',borderWidth:2,borderColor:'#000000',padding:10,width:200,borderRadius:30,marginTop:10,marginRight:'auto',marginLeft:'auto'}}>
+            <TouchableOpacity onPress={createuserforseller} style={{display:'flex',borderWidth:2,borderColor:'#5bf6db',padding:10,width:'90%',borderRadius:30,marginTop:10,marginRight:'auto',marginLeft:'auto',backgroundColor:'#5bf6db'}}>
             <Text style={{fontSize: 17, fontWeight:'bold', color: '#000000',textAlign:'center',color:'#000000'}}>Register</Text>
             </TouchableOpacity>
-            </View>
+            
         </View>
       );
 }

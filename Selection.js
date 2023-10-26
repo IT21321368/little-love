@@ -11,23 +11,17 @@ function Select(){
       };
     return (
         <View
-          style={{ backgroundColor: 'rgb(238,174,202)', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <LinearGradient
-    colors={['rgba(238,174,202,1)', 'rgba(148,187,233,1)']}
-    start={{ x: 0, y: 0 }}
-    end={{ x: 1, y: 1 }}
-    style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    }}/>
-          <TouchableOpacity onPress={openmidwiferegform} style={{borderRadius:30,borderWidth:2,borderColor:'#FFF',padding:15,margin:20,backgroundColor:'#000000'}}>
-            <Text  style={{fontWeight:'bold',fontSize:20,color:'#FFF'}}>MidWife</Text>
+          style={{  flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 26, color: '#000000',alignSelf: 'flex-start',left:30,bottom:100 }}>Sign up As,</Text>
+            <Text style={{ fontSize: 18, color: '#000000' ,alignSelf: 'flex-start',left:30,bottom:93}}>Choose your account</Text>
+
+   
+    
+          <TouchableOpacity onPress={openmidwiferegform} style={{borderRadius:30,borderWidth:2,borderColor:'#5bf6db',padding:15,margin:20,backgroundColor:'#5bf6db', width: '90%' , alignItems:'center'}}>
+            <Text  style={{fontWeight:'bold',fontSize:20,color:'#000000'}}>MidWife</Text>
           </TouchableOpacity>
-          <TouchableOpacity  onPress={openregstersellerform} style={{borderRadius:30,borderWidth:2,borderColor:'#FFF',padding:15,margin:20,backgroundColor:'#000000'}}>
-            <Text style={{fontWeight:'bold',fontSize:20,color:'#FFF'}}>  Seller  </Text>
+          <TouchableOpacity  onPress={openregstersellerform} style={{borderRadius:30,borderWidth:2,borderColor:'#5bf6db',padding:15,margin:20,backgroundColor:'#5bf6db', width: '90%' , alignItems:'center'}}>
+            <Text style={{fontWeight:'bold',fontSize:20,color:'#000000'}}>  Seller  </Text>
           </TouchableOpacity>
         </View>
       );

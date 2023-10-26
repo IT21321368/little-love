@@ -1,67 +1,144 @@
-import React, { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { firebaseConfig } from '../FirebaseConfig';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert,Image } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
+const emailicon = require('../assets/email.png');
+const regicon = require('../assets/registration.png');
+const passicon = require('../assets/padlock.png');
 
 function Login() {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [ScretCode, setScretNo] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [registeredNo, setregisteredNo] = useState(''); // Initialize with an empty string
+  const [password, setPassword] = useState('');
+  const [userRole, setUserRole] = useState('Mother'); // Default to Midwife
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const navigation = useNavigation();
+  
 
-  const loginviaemailandpassword = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log('Signed in!');
-        const user = userCredential.user;
-        Alert.alert('Login Successfully');
-        navigation.navigate('Home', {
-          passedText: ScretCode,
+  const login = () => {
+    if (userRole === 'Mother') {
+
+      if ((!email || !registeredNo)) {
+        Alert.alert('Please enter the Registered No.');
+        return; // Don't proceed with login if the registeredNo is empty
+      }
+      // For Mothers, use the "Registered No" as both email and password
+      signInWithEmailAndPassword(auth, email, registeredNo)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          Alert.alert('Login Successfully');
+          // Navigate to the Mother home screen
+          console.log('Logged in as a Mother:', user);
+          // navigation.navigate('Mother Profile');
+          console.log('Before navigation, registeredNo:', registeredNo);
+
+          navigation.navigate('Mother Profile', {
+            registeredNo: registeredNo, // Pass the registeredNo to the Mother Profile screen
+            
+          });
+          console.log('After navigation, registeredNo:', registeredNo);
+        })
+        .catch((error) => {
+          if (error.code === 'auth/invalid-login-credentials') {
+            Alert.alert('Invalid login credentials. Please double-check your email and registered number.');
+          } else {
+            console.error(error);
+            Alert.alert(error.message);
+          }
         });
-      })
-      .catch((error) => {
-        Alert.alert(error.message);
-      });
+    } else if (userRole === 'Midwife'){
+      // For Midwives, use the provided email and password
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          Alert.alert('Login Successfully');
+          // Navigate to the Midwife home screen
+          navigation.navigate('Home');
+        })
+        .catch((error) => {
+          console.error(error);
+          Alert.alert(error.message);
+        });
+    } else if (userRole === 'Seller') {
+      // Handle login for "Seller" role here
+      // Use the provided email and password for sellers
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          Alert.alert('Login Successfully as a Seller');
+          // Navigate to the Seller home screen or the appropriate screen for sellers
+          navigation.navigate('Seller Profile'); // You can adjust this navigation route
+        })
+        .catch((error) => {
+          console.error(error);
+          Alert.alert(error.message);
+        });
+    }
   };
 
-  const Selectwhoyouare = () => {
-    navigation.navigate('Select');
-  };
-
-  const Resetpasswordpage = () => {
-    navigation.navigate('Reset');
+  const handleRoleChange = (selectedRole) => {
+    setUserRole(selectedRole);
   };
 
   return (
-    
-    <View style={{  backgroundColor: 'rgb(238,174,202)',alignItems: 'center', justifyContent: 'center' }}>
-      <LinearGradient
-    colors={['rgba(238,174,202,1)', 'rgba(148,187,233,1)']}
-    start={{ x: 0, y: 0 }}
-    end={{ x: 1, y: 1 }}
-    style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    }}/>
-      <View style={{ borderColor: '#FFF', borderWidth: 2, padding: 30, marginTop:210,marginBottom:200,borderRadius: 40, justifyContent: 'center' }}>
-        <Text style={{ fontFamily:'', flex:1,textAlign: 'center', fontSize: 30, fontWeight: 'bold', marginTop: 10, marginBottom: 10, color: '#000000' }}>Welcome Back</Text>
-        <Text style={{ flex:1,textAlign: 'center', fontSize:15, fontWeight: 'bold', marginTop: 10, marginBottom: 10, color: '#000000' }}>Hey! Good to see you again</Text>
-        <TextInput  onChangeText={(text) => setEmail(text)} style={{ borderWidth: 2, borderColor: '#FFF', backgroundColor: '#FFF', padding: 15, width: 250, borderRadius: 30, margin: 10 }} placeholder="Enter Email" />
-        <TextInput onChangeText={(text) => setPassword(text)} style={{ borderWidth: 2, borderColor: '#FFF', backgroundColor: '#FFF', padding: 15, width: 250, borderRadius: 30, margin: 10, marginBottom: 20 }} placeholder="Enter Password" />
-        <TextInput onChangeText={(text) => setScretNo(text)} style={{ borderWidth: 2, borderColor: '#FFF', backgroundColor: '#FFF', padding: 15, width: 250, borderRadius: 30, margin: 10, marginBottom: 20 }} placeholder="MW NO/SLE NO/MOM No" />
-        <Text onPress={Resetpasswordpage} style={{ fontWeight: 'bold', textAlign: 'center', marginTop:-5,marginBottom:10 }}>Forgot password?</Text>
-        <TouchableOpacity onPress={loginviaemailandpassword} style={{backgroundColor:'#000000', display: 'flex', borderWidth: 2, borderColor: '#FFF', padding: 10, width: 200, borderRadius: 30, marginTop: 10, marginRight: 'auto', marginLeft: 'auto' }}>
-          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#FFF', textAlign: 'center', color: '#DDD' }}>Login</Text>
+    <View style={{  alignItems: 'center', justifyContent: 'center' }}>
+     
+      <View style={{  padding: 30, marginTop: 150, marginBottom: 200, borderRadius: 40, justifyContent: 'center' }}>
+        <Text style={{ flex: 1, textAlign: 'center', fontSize: 30, fontWeight: 'bold', marginTop: 10, marginBottom: 5, color: '#000000',alignSelf: 'flex-start',left:'25px',bottom:50 }}>Welcome Back</Text>
+        <Text style={{ flex: 1, textAlign: 'center', fontSize: 15, fontWeight: 'bold', marginTop: 10, marginBottom: 10, color: '#000000',alignSelf: 'flex-start',left:'25px',bottom:50 }}>Hey! Good to see you again</Text>
+        <Picker
+          selectedValue={userRole}
+          onValueChange={(itemValue) => handleRoleChange(itemValue)}
+          style={{
+            borderWidth: 2,
+            borderColor: '#D0FEF5',
+            backgroundColor: '#D0FEF5',
+            padding: 15,
+            width: 300,
+            borderRadius: 30,
+            margin: 10,
+          }}
+        >
+          <Picker.Item label="Mother" value="Mother" />
+          <Picker.Item label="Midwife" value="Midwife" />
+          <Picker.Item label="Seller" value="Seller" />
+        </Picker>
+        <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10 }}>
+      <Image source={emailicon} style={{ width: 24, height: 24, marginRight: 10 }} />
+      <TextInput onChangeText={(text) => setEmail(text)} style={{ flex: 1 }} placeholder="Enter Email" />
+    </View>
+        {/* <TextInput onChangeText={(text) => setEmail(text)} style={{ borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10 }} placeholder="Enter Email" /> */}
+        {userRole === 'Mother' && (
+          // <TextInput onChangeText={(text) => setregisteredNo(text)} style={{ borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10 }} placeholder="Enter Registered No" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10, marginBottom: 20 }}>
+          <Image source={regicon} style={{ width: 24, height: 24, marginRight: 10 }} />
+          <TextInput onChangeText={(text) => setregisteredNo(text)} style={{ flex: 1 }} placeholder="Enter Registered No" />
+        </View>
+        )}
+        {userRole === 'Midwife' && (
+          // <TextInput onChangeText={(text) => setPassword(text)} style={{ borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10, marginBottom: 20 }} placeholder="Enter Password" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10, marginBottom: 20 }}>
+    <Image source={passicon} style={{ width: 24, height: 24, marginRight: 10 }} />
+    <TextInput onChangeText={(text) => setPassword(text)} style={{ flex: 1 }} placeholder="Enter Password" />
+  </View>
+        )}
+        {userRole === 'Seller' && (
+          // <TextInput onChangeText={(text) => setPassword(text)} style={{ borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10, marginBottom: 20 }} placeholder="Enter Password" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 2, borderColor: '#D0FEF5', backgroundColor: '#D0FEF5', padding: 15, width: 300, borderRadius: 30, margin: 10, marginBottom: 20 }}>
+    <Image source={passicon} style={{ width: 24, height: 24, marginRight: 10 }} />
+    <TextInput onChangeText={(text) => setPassword(text)} style={{ flex: 1 }} placeholder="Enter Password" />
+  </View>
+        )}
+        <Text onPress={() => navigation.navigate('Reset')} style={{ fontWeight: 'bold', textAlign: 'center', marginTop: -5, marginBottom: 10 }}>Forgot password?</Text>
+        <TouchableOpacity onPress={login} style={{ backgroundColor: '#5bf6db', display: 'flex', borderWidth: 2, borderColor: '#5bf6db', padding: 10, width: 300, borderRadius: 30, marginTop: 10, marginRight: 'auto', marginLeft: 'auto' }}>
+          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#000000', textAlign: 'center', color: '#000000' }}>Login</Text>
         </TouchableOpacity>
-        <Text onPress={Selectwhoyouare} style={{marginTop:15, fontWeight: 'bold', textAlign: 'center' }}>Haven't an account? Signup</Text>
+        <Text onPress={() => navigation.navigate('Select')} style={{ marginTop: 15, fontWeight: 'bold', textAlign: 'center' }}>Haven't an account? Signup</Text>
       </View>
     </View>
   );
