@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import React, {useState, useEffect} from "react";
-import { View ,Image,ScrollView,TouchableOpacity,Text,TextInput} from "react-native";
+import { View ,Image,StyleSheet,ScrollView,TouchableOpacity,Text,TextInput,ImageBackground} from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 import { ref, get, child ,remove} from 'firebase/database'; // Import necessary Firebase database functions
 import { db } from '../FirebaseConfig'; // Import your Firebase configuration
+import backgroundImage from '../assets/bg.png';
 
 const scanIcon = require('../assets/qr-scan.png');
 
@@ -37,6 +38,9 @@ function Home(){
   const navigateToQRscan = () => {
     navigation.navigate('QR Scan');
   };
+  const navigateToMotherList = () => {
+    navigation.navigate('MotherList');
+  };
   
   const fetchClinicDetails = () => {
     const detailsRef = ref(db, '/clinicdetails');
@@ -53,17 +57,7 @@ function Home(){
   
   // Fetch clinic details from Firebase when the component mounts
   useEffect(() => {
-    // const detailsRef = ref(db, '/clinicdetails'); // Replace 'clinicdetails' with your Firebase database path
-    // get(child(detailsRef, '/')).then((snapshot) => {
-    //   if (snapshot.exists()) {
-    //     const data = snapshot.val();
-    //     if (data) {
-    //       // const detailsArray = Object.values(data);
-    //       const detailsArray = Object.entries(data).map(([key, value]) => ({ key, ...value }));
-    //       setClinicDetails(detailsArray);
-    //     }
-    //   }
-    // });
+   
     fetchClinicDetails();
   }, []);
 
@@ -83,7 +77,7 @@ function Home(){
   };
   
   return(
-
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
     <View style={{flex:1,}}>
           <View style={{ backgroundColor: '#5BF6DB', padding: 16 }}>
         <View style={{ flexDirection: 'row',justifyContent: 'space-between', padding: 16 }}>
@@ -98,25 +92,25 @@ function Home(){
 
     <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={navigateToAddClinicDetails}>
-          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 9, margin: 6, backgroundColor: '#5BF6DB' ,height: 60, width: 120}}>
+          <View style={{ borderRadius: 10, borderWidth: 1, borderColor: '#000000', padding: 9, margin: 6, backgroundColor: '#5BF6DB' ,height: 60, width: 120}}>
             <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000',textAlign: 'center' }}>Add Clinic Details</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={navigateToAddMother}>
-          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 10, margin: 6, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
+          <View style={{ borderRadius: 10, borderWidth: 1, borderColor: '#000000', padding: 10, margin: 6, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000',textAlign: 'center' }}>Add Mother</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={navigateToAddHealthGuides}>
-          <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 10, margin: 6, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
+          <View style={{ borderRadius: 10, borderWidth: 1, borderColor: '#000000', padding: 10, margin: 6, backgroundColor: '#5BF6DB', height: 60, width: 120 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000',textAlign: 'center' }}>Add Health Guides</Text>
           </View>
         </TouchableOpacity>
       </View> 
-      <TouchableOpacity >
-        <View style={{ borderRadius: 10, borderWidth: 2, borderColor: '#000000', padding: 8, margin: 6, backgroundColor: '#5BF6DB', height: 40, width: 385 }}>
+      <TouchableOpacity onPress={navigateToMotherList} >
+        <View style={{ borderRadius: 10, borderWidth: 1, borderColor: '#000000', padding: 8, margin: 6, backgroundColor: '#5BF6DB', height: 40, width: 385 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#000000', textAlign: 'center' }}>Mother List</Text>
         </View>
       </TouchableOpacity>
@@ -161,7 +155,16 @@ style={{width: 50, height: 40,marginLeft:45,marginTop:30,marginRight:50,marginBo
 
   </View>
   </View>
+  </ImageBackground>
   )
 }
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  }
+  });
 
 export default Home;

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TextInput, TouchableOpacity,ImageBackground } from 'react-native';
 import { ref, push, set } from 'firebase/database';
 import { db } from '../FirebaseConfig';
+import backgroundImage from '../assets/bg.png';
 
 const Add = ({ navigation }) => {
   const [date, setdate] = useState('');
@@ -45,6 +46,7 @@ const Add = ({ navigation }) => {
   }, []);
 
   return (
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.container}>
         <Text style={styles.header}>Add clinic Details</Text>
@@ -83,6 +85,7 @@ const Add = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 };
 
@@ -140,6 +143,11 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     marginBottom: '8%',
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  }
 });
 
 export default Add;

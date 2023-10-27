@@ -5,7 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { firebaseConfig } from '../FirebaseConfig';
 import { ref, set } from 'firebase/database';
 import { db } from '../FirebaseConfig';
-import { View, Text,TextInput,TouchableOpacity, Alert } from 'react-native';
+import { View, Text,TextInput,TouchableOpacity, Alert,StyleSheet,ImageBackground } from 'react-native';
+import backgroundImage from '../assets/bg.png';
+
 function Registerseller() {
     const navigation = useNavigation();
     const [email,setEmail]=React.useState('');
@@ -57,6 +59,7 @@ function Registerseller() {
           navigation.navigate('Login');
         };
     return(
+      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
         <View>
           
             <Text style={{textAlign:'center',fontSize:30,fontWeight:'bold',marginTop:70,marginBottom:40,color:'#000000'}}>Little Love</Text>
@@ -71,7 +74,15 @@ function Registerseller() {
             </TouchableOpacity>
             
         </View>
+        </ImageBackground>
       );
 }
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  }
+  });
 
 export default Registerseller;

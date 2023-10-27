@@ -3,8 +3,9 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { useNavigation } from '@react-navigation/native';
 import { firebaseConfig } from '../FirebaseConfig';
-import { View, Text, TextInput, TouchableOpacity, Alert,Image } from 'react-native';
+import { View, Text,StyleSheet, TextInput, TouchableOpacity, Alert,Image ,ImageBackground} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import backgroundImage from '../assets/bg.png';
 
 const emailicon = require('../assets/email.png');
 const regicon = require('../assets/registration.png');
@@ -86,6 +87,7 @@ function Login() {
   };
 
   return (
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
     <View style={{  alignItems: 'center', justifyContent: 'center' }}>
      
       <View style={{  padding: 30, marginTop: 150, marginBottom: 200, borderRadius: 40, justifyContent: 'center' }}>
@@ -141,7 +143,15 @@ function Login() {
         <Text onPress={() => navigation.navigate('Select')} style={{ marginTop: 15, fontWeight: 'bold', textAlign: 'center' }}>Haven't an account? Signup</Text>
       </View>
     </View>
+    </ImageBackground>
   );
 }
 
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  }
+  });
 export default Login;

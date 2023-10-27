@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { firebaseConfig } from '../FirebaseConfig';
 import { ref, set } from 'firebase/database';
 import { db } from '../FirebaseConfig';
-import { View, Text,TextInput,TouchableOpacity, Alert } from 'react-native';
+import { View, Text,TextInput,TouchableOpacity, Alert,StyleSheet,ImageBackground } from 'react-native';
+import backgroundImage from '../assets/bg.png';
 
 function Registermid() {
   const navigation = useNavigation();
@@ -57,7 +58,7 @@ function Registermid() {
         navigation.navigate('Login'); // Navigate to the 'Home' screen
       };
   return(
-    
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
         <View>
         <Text style={{textAlign:'center',fontSize:30,fontWeight:'bold',marginTop:50,marginBottom:70,color:'#000000',top:'50px'}}>Signup</Text>
         <TextInput onChangeText={(text) => setName(text)} style={{borderWidth:2,borderColor:'#D0FEF5',backgroundColor:'#D0FEF5',padding:15,width:'90%',borderRadius:30,margin:'20px',marginBottom:20,marginRight:'auto',marginLeft:'auto'}}  placeholder= "Enter Name"/>
@@ -70,8 +71,16 @@ function Registermid() {
         <Text style={{fontSize: 17, fontWeight:'bold', color: '#000000',textAlign:'center'}}>Register</Text>
         </TouchableOpacity>
         </View>
+        </ImageBackground>
     
   );
 }
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  }
+  });
 
 export default Registermid;

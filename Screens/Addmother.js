@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, ScrollView, TextInput, TouchableOpacity, ImageB
 import { ref, query, orderByChild, equalTo, push, onValue, set } from 'firebase/database';
 import { db } from '../FirebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Make sure to include getAuth here
-// const backgroundImage = require('../assets/bg.png'); // Replace with the actual path to your background image
+const backgroundImage = require('../assets/bg.png'); // Replace with the actual path to your background image
 
 const Add = ({ navigation }) => {
   const [name, setname] = useState('');
@@ -63,7 +63,7 @@ const Add = ({ navigation }) => {
   }, []);
 
   return (
-    // <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.container}>
           <Text style={styles.header}>Create Mother Profile</Text>
@@ -121,7 +121,7 @@ const Add = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    // </ImageBackground>
+     </ImageBackground>
   );
 };
 
